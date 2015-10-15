@@ -12,15 +12,15 @@ use IEEE.NUMERIC_STD.ALL;
 entity DivisorFrecuencia is
 	
 	 Generic (
-				 clk_fpga 		: integer := 100000000; --Frecuencia del reloj de entrada en Hz.
-				 frec_salida  : integer := 1 --Frecuencia que se busca obtener en Hz
-			   );
+		   clk_fpga 	: integer := 100000000; --Frecuencia del reloj de entrada en Hz.
+		   frec_salida  : integer := 1 --Frecuencia que se busca obtener en Hz
+		  );
     
 	 Port 	( 
-			    CLK 		    : in   STD_LOGIC;
-             RST 		    : in   STD_LOGIC;
-             Salida	       : out  STD_LOGIC
-				);
+		  CLK 	    : in   STD_LOGIC;
+             	  RST 	    : in   STD_LOGIC;
+             	  Salida    : out  STD_LOGIC
+		);
 			 
 end DivisorFrecuencia;
 
