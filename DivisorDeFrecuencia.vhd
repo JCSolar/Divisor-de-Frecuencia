@@ -5,14 +5,23 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL
+use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 
 entity DivisorFrecuencia is
-    Port ( CLK 		    : in   STD_LOGIC;
-           RST 		    : in   STD_LOGIC;
-           Salida	    : out  STD_LOGIC);
+	
+	 Generic (
+				 clk_fpga 		: integer := 100000000; --Frecuencia del reloj de entrada en Hz.
+				 frec_salida  : integer := 1 --Frecuencia que se busca obtener en Hz
+			   );
+    
+	 Port 	( 
+			    CLK 		    : in   STD_LOGIC;
+             RST 		    : in   STD_LOGIC;
+             Salida	       : out  STD_LOGIC
+				);
+			 
 end DivisorFrecuencia;
 
 architecture Behavioral of DivisorFrecuencia is
@@ -21,21 +30,17 @@ signal aux: STD_LOGIC;
 signal contador: integer;
 
 signal cuenta: integer;
-signal cociente: integer;
-signal mhz: integer;
-signal frecuencia: integer;
+signal razon: integer;
 
-						---Cociente = CLKdeEntrada/FrecuenciaDeseada, 
-						---Cuenta = (Cociente / 2) -1
+---Razón de Proporción = CLKdeEntrada/FrecuenciaDeseada 
+---Cuenta = (Razón/2) - 1
 
 begin	
 
-	process(cociente, mhz, frecuencia)
-		begin
-			mhz <= 100; 						--Frecuencia del reloj en Mhz.
-			frecuencia <= 1; 					--Frecuencia de salida deseada en Hz.
-			cociente <= (mhz*1000000)/(frecuencia);
-			cuenta <= (cociente/2)-1;
+	process(razon, RST, CLK)
+		begin			
+			razon <= (clk_fpga)/(frec_salida);
+			cuenta <= (razon/2)-1;
 	end process;
 		
 
@@ -57,5 +62,3 @@ begin
     Salida <= aux;
 
 end Behavioral;
-
-
