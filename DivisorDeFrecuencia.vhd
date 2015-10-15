@@ -5,7 +5,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.all;
+use IEEE.STD_LOGIC_ARITH.ALL
 use IEEE.NUMERIC_STD.ALL;
 
 
@@ -17,7 +17,7 @@ end DivisorFrecuencia;
 
 architecture Behavioral of DivisorFrecuencia is
 
-signal temp: STD_LOGIC;
+signal aux: STD_LOGIC;
 signal contador: integer;
 
 signal cuenta: integer;
@@ -43,10 +43,10 @@ begin
 		begin
 			if (RST = '1') then
 				contador <= 0;
-				temp <= '0';
+				aux <= '0';
 			elsif rising_edge(CLK) then
 				if (contador = cuenta) then
-					temp <= NOT(temp);
+					aux <= NOT(aux);
 					contador <= 0;
 				else
 					contador <= contador+1;
@@ -54,7 +54,7 @@ begin
 			end if;
 	end process;
      
-    Salida <= temp;
+    Salida <= aux;
 
 end Behavioral;
 
