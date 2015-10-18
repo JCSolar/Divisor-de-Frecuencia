@@ -5,51 +5,51 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 
 entity DivisorFrecuencia is
 	
 	 Generic (
-		   clk_fpga 	: integer := 100000000; --Frecuencia del reloj de entrada en Hz.
-		   frec_salida  : integer := 1 --Frecuencia que se busca obtener en Hz
-		  );
+		  FREQ_IN		: INTEGER := 100000000; --Frecuencia del reloj de ENTRADA en Hz. Valor modificable.
+		  FREQ_OUT		: INTEGER := 1 --Frecuencia que se desea obtener de SALIDA en Hz. Valor modificable.
+		 );
     
-	 Port 	( 
-		  CLK 	    : in   STD_LOGIC;
-             	  RST 	    : in   STD_LOGIC;
-             	  Salida    : out  STD_LOGIC
-		);
+	 Port 	(
+		  clk_in		: in   STD_LOGIC; --Señal de reloj de entrada
+             	  rst			: in   STD_LOGIC; --Botón Reset
+             	  clk_out		: out  STD_LOGIC  --Señal de reloj de salida
+		 );
 			 
 end DivisorFrecuencia;
+
 
 architecture Behavioral of DivisorFrecuencia is
 
 signal aux: STD_LOGIC;
-signal contador: integer;
-
-signal cuenta: integer;
-signal razon: integer;
+signal contador: INTEGER;
+signal razon: INTEGER;
+signal cuenta: INTEGER;
 
 ---Razón de Proporción = CLKdeEntrada/FrecuenciaDeseada 
 ---Cuenta = (Razón/2) - 1
 
 begin	
 
-	process(razon, RST, CLK)
+	process (razon, rst, clk_in) --Proceso que calcula el número de ciclos que se deben contar para obtener
+				     -- frecuencia deseada.
 		begin			
-			razon <= (clk_fpga)/(frec_salida);
+			razon <= (FREQ_IN)/(FREQ_OUT);
 			cuenta <= (razon/2)-1;
 	end process;
 		
 
-	DivisorFrecuencia: process (RST, CLK, cuenta) 
+	process (rst, clk_in, cuenta) --Proceso divisor de frecuencia asíncrono.
 		begin
-			if (RST = '1') then
+			if (rst = '1') then
 				contador <= 0;
 				aux <= '0';
-			elsif rising_edge(CLK) then
+			elsif rising_edge(clk_in) then
 				if (contador = cuenta) then
 					aux <= NOT(aux);
 					contador <= 0;
@@ -59,6 +59,6 @@ begin
 			end if;
 	end process;
      
-    Salida <= aux;
+   clk_out <= aux;
 
 end Behavioral;
